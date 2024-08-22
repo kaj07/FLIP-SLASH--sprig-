@@ -1,14 +1,10 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: FLIP-SLASH
 @author: kaj07
 @tags: [puzzle]
 @addedOn: 2024-00-00
 */
 
-const player = "p"
 const black = "x"
 const darkGrey = "G"
 const grey = "g"
@@ -18,23 +14,6 @@ const blue = "b"
 const red = "c"
 
 setLegend(
-  [ player, bitmap`
-................
-................
-.......000......
-.......0.0......
-......0..0......
-......0...0.0...
-....0003.30.0...
-....0.0...000...
-....0.05550.....
-......0...0.....
-.....0....0.....
-.....0...0......
-......000.......
-......0.0.......
-.....00.00......
-................` ],
   [ black, bitmap `
 0000000000000000
 0000000000000000
@@ -184,18 +163,18 @@ c..............b
 c..............b
 ccccccccbbbbbbbb`,
   map `
-................
-........p.......
-..p.............
-................
-................
-......p......p..
-................
-.p..............
-.........p......
-.....p...p......
-................
-................`
+bbbbbbbxxccccccc
+bbbbbbbxxccccccc
+bbbbbbbxxccccccc
+bbbbbbbxxccccccc
+bbbbbbbxxccccccc
+bbbbbbbxxccccccc
+bbbbbbbxxccccccc
+bbbbbbbxxccccccc
+bbbbbbbxxccccccc
+bbbbbbbxxccccccc
+bbbbbbbxxccccccc
+bbbbbbbxxccccccc`
 ]
 
 setMap(levels[level])
@@ -241,17 +220,48 @@ changeTextColor(color`1`, 1000)
   }, 1400))
   .then(() => setTimeout(() => {
     addText("(PRESS!)", { x: 6, y: 12, color: color `0`})
-    setMap(levels[1]);
+    level += 1
+    setMap(levels[level]);
   }, 2100));
+
+let inputUsed = false;
 
 ["w", "a", "s", "d", "i", "j", "k", "l"].forEach(key => {
   onInput(key, () => {
-    level += 1;
+    if (!inputUsed) {
+      level += 1
+      inputUsed = true;
+    }
   });
 });
 
+let inputUsed2 = false;
+
 setTimeout(() => {
   console.log(level)
-if( level == 2) {
+  
   setMap(levels[level]);
-}
+    if( level == 2 && !inputUsed2) {
+      clearText()
+      setMap(levels[level])
+      inputUsed2 = true;
+
+    const dx = 1;
+      
+    onInput("a", () => {
+      getAll(black).forEach(sprite => {
+        sprite.x -= dx;
+      });
+
+    onInput("a", () => {
+      getAll(black).forEach(sprite => {
+        sprite.x -= dx;
+      });
+      
+    })
+
+
+  
+  }
+  
+}, 11000);
