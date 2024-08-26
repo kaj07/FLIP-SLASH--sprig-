@@ -163,18 +163,18 @@ c..............b
 c..............b
 ccccccccbbbbbbbb`,
   map `
-bbbbbbbxxccccccc
-bbbbbbbxxccccccc
-bbbbbbbxxccccccc
-bbbbbbbxxccccccc
-bbbbbbbxxccccccc
-bbbbbbbxxccccccc
-bbbbbbbxxccccccc
-bbbbbbbxxccccccc
-bbbbbbbxxccccccc
-bbbbbbbxxccccccc
-bbbbbbbxxccccccc
-bbbbbbbxxccccccc`
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc`
 ]
 
 setMap(levels[level])
@@ -182,6 +182,10 @@ setMap(levels[level])
 // Introduction 
 
 setBackground(black)
+
+let inputUsed = false;
+let inputUsed2 = false;
+let counter = 0;
 
 const changeTextColor = (color, delay) => {
   return new Promise((resolve) => {
@@ -222,46 +226,36 @@ changeTextColor(color`1`, 1000)
     addText("(PRESS!)", { x: 6, y: 12, color: color `0`})
     level += 1
     setMap(levels[level]);
-  }, 2100));
-
-let inputUsed = false;
-
-["w", "a", "s", "d", "i", "j", "k", "l"].forEach(key => {
-  onInput(key, () => {
-    if (!inputUsed) {
-      level += 1
-      inputUsed = true;
-    }
-  });
-});
-
-let inputUsed2 = false;
-
-setTimeout(() => {
-  console.log(level)
-  
-  setMap(levels[level]);
-    if( level == 2 && !inputUsed2) {
-      clearText()
-      setMap(levels[level])
-      inputUsed2 = true;
+    ["w", "a", "s", "d", "i", "j", "k", "l"].forEach(key => {
+      onInput(key, () => {
+        if (!inputUsed) {
+          level += 1
+          inputUsed = true;
+    setMap(levels[level]);
+      if( level === 2 && !inputUsed2) {
+        clearText();
+        setMap(levels[level]);
+        inputUsed2 = true;
 
     const dx = 1;
       
     onInput("a", () => {
-      getAll(black).forEach(sprite => {
-        sprite.x -= dx;
+      counter += 1
+      if (counter < 8) {
+        getAll(black).forEach(sprite => {
+          addSprite(sprite.x, sprite.y, "c");
+          clearTile(sprite.x - dx, sprite.y);
+          sprite.x -= dx
+          
+          if (sprite.x === 0) {
+            clearTile(16, sprite.y);
+            addSprite(16, sprite.y, "x");
+          }
+        }
       });
-
-    onInput("a", () => {
-      getAll(black).forEach(sprite => {
-        sprite.x -= dx;
-      });
-      
-    })
-
-
-  
+    });
   }
-  
-}, 11000);
+        }
+      });
+     })
+  }, 2100));
