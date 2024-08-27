@@ -4,10 +4,10 @@
 
 A unique puzzle game based on flipping the colours of the screen.
 
-A link to the current code can be found here: https://sprig.hackclub.com/share/cAoAEjGdQhC10J0ED2pR
-
-(please keep in mind this is no where near finished, so there may be bugs if you press buttons too early)
+A link to the current code can be found here: https://sprig.hackclub.com/share/s4xkQGJyM4PZOU4BnsaY
 
 - Features a loading screen before the main menu
 - Will be comprised of several levels
 - My first proper project using Javascript!
+
+[currently the first level is finished but has no detection when you have done so]
