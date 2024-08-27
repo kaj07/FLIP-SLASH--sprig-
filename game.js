@@ -6,6 +6,7 @@
 */
 
 const black = "x"
+const border = "z"
 const darkGrey = "G"
 const grey = "g"
 const white = "w"
@@ -31,6 +32,23 @@ setLegend(
 0000000000000000
 0000000000000000
 0000000000000000` ],
+  [ border, bitmap `
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`],
   [ darkGrey, bitmap `
 LLLLLLLLLLLLLLLL
 LLLLLLLLLLLLLLLL
@@ -240,19 +258,59 @@ changeTextColor(color`1`, 1000)
     const dx = 1;
       
     onInput("a", () => {
-      counter += 1
+      
       if (counter < 8) {
+        counter += 1
+        console.log("counter: " + counter)
+        
         getAll(black).forEach(sprite => {
           addSprite(sprite.x, sprite.y, "c");
           clearTile(sprite.x - dx, sprite.y);
-          sprite.x -= dx
+          sprite.x -= dx;
           
           if (sprite.x === 0) {
             clearTile(16, sprite.y);
-            addSprite(16, sprite.y, "x");
+            addSprite(16, sprite.y, "z");
+
           }
-        }
-      });
+          
+          if (sprite.x === 15) {
+            clearTile(16, sprite.y);
+            addSprite(16, sprite.y, "c");
+            clearTile(0, sprite.y);
+            addSprite(0, sprite.y, "b");
+
+          }
+        });
+      }
+    });
+
+    onInput("d", () => {
+      
+      if (counter > -8) {
+        counter -= 1
+        console.log("counter: " + counter)
+     
+        getAll(black).forEach(sprite => {
+          addSprite(sprite.x, sprite.y, "b");
+          clearTile(sprite.x + dx, sprite.y);
+          sprite.x += dx;     
+          
+          if (sprite.x === 16) {
+            clearTile(0, sprite.y);
+            addSprite(0, sprite.y, "z");
+          
+          }
+          
+          if (sprite.x === 1) {
+            clearTile(0, sprite.y);
+            addSprite(0, sprite.y, "b");
+            clearTile(16, sprite.y);
+            addSprite(16, sprite.y, "c");
+
+          }
+        });
+      }
     });
   }
         }
