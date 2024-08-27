@@ -1,7 +1,7 @@
 /*
 @title: FLIP-SLASH
 @author: kaj07
-@tags: [puzzle]
+@tags: [puzzle] , [logic]
 @addedOn: 2024-00-00
 */
 
@@ -33,10 +33,10 @@ setLegend(
 0000000000000000
 0000000000000000` ],
   [ border, bitmap `
-0000000000000000
-0000000000000000
-0000000000000000
-0000000000000000
+0000000000002222
+0000000000000002
+0000000000000002
+0000000000000002
 0000000000000000
 0000000000000000
 0000000000000000
@@ -153,8 +153,6 @@ LLLLLLLLLLLLLLLL`],
 3333333333333333`]
 )
 
-setSolids([])
-
 let level = 0
 const levels = [
   map`
@@ -192,19 +190,46 @@ bbbbbbbbxcccccccc
 bbbbbbbbxcccccccc
 bbbbbbbbxcccccccc
 bbbbbbbbxcccccccc
-bbbbbbbbxcccccccc`
+bbbbbbbbxcccccccc`,
+  map `
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+xxxxxxxxxcccccccc
+ccccccccccccccccc
+ccccccccccccccccc
+ccccccccccccccccc
+ccccccccccccccccc
+ccccccccccccccccc
+ccccccccccccccccc`
 ]
 
 setMap(levels[level])
-
-// Introduction 
-
 setBackground(black)
 
 let inputUsed = false;
 let inputUsed2 = false;
 let counter = 0;
 
+function checkColours() {
+    numberOfBlue = getAll(blue).length;
+    numberOfRed = getAll(red).length;    
+    console.log("blues: " + numberOfBlue)
+    console.log("reds: " + numberOfRed)   
+
+    if (numberOfBlue == 180) {
+      console.log("sfx for win")
+      level += 1
+      setMap(levels[level]);
+    }
+  
+    if (numberOfRed == 180) {
+      console.log("sfx for opWin")
+    }
+}
+  
 const changeTextColor = (color, delay) => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -255,65 +280,74 @@ changeTextColor(color`1`, 1000)
         setMap(levels[level]);
         inputUsed2 = true;
 
-    const dx = 1;
-      
+    let numberOfBlue = getAll(blue).length;
+    let numberOfRed  = getAll(red).length;
+        
     onInput("a", () => {
       
-      if (counter < 8) {
-        counter += 1
-        console.log("counter: " + counter)
-        
-        getAll(black).forEach(sprite => {
-          addSprite(sprite.x, sprite.y, "c");
-          clearTile(sprite.x - dx, sprite.y);
-          sprite.x -= dx;
-          
-          if (sprite.x === 0) {
-            clearTile(16, sprite.y);
-            addSprite(16, sprite.y, "z");
+      checkColours()
 
-          }
+      if (level == 2) {      
+        if (counter < 8) {
+          counter += 1
+          console.log("counter: " + counter)
           
-          if (sprite.x === 15) {
-            clearTile(16, sprite.y);
-            addSprite(16, sprite.y, "c");
-            clearTile(0, sprite.y);
-            addSprite(0, sprite.y, "b");
-
-          }
-        });
+          getAll(black).forEach(sprite => {
+            addSprite(sprite.x, sprite.y, "c");
+            clearTile(sprite.x - 1, sprite.y);
+            sprite.x -= 1;
+            
+            if (sprite.x === 0) {
+              clearTile(16, sprite.y);
+              addSprite(16, sprite.y, "z");
+  
+            }
+            
+            if (sprite.x === 15) {
+              clearTile(16, sprite.y);
+              addSprite(16, sprite.y, "c");
+              clearTile(0, sprite.y);
+              addSprite(0, sprite.y, "b");
+  
+            }
+          });
+        }
       }
     });
 
     onInput("d", () => {
       
-      if (counter > -8) {
-        counter -= 1
-        console.log("counter: " + counter)
-     
-        getAll(black).forEach(sprite => {
-          addSprite(sprite.x, sprite.y, "b");
-          clearTile(sprite.x + dx, sprite.y);
-          sprite.x += dx;     
-          
-          if (sprite.x === 16) {
-            clearTile(0, sprite.y);
-            addSprite(0, sprite.y, "z");
-          
-          }
-          
-          if (sprite.x === 1) {
-            clearTile(0, sprite.y);
-            addSprite(0, sprite.y, "b");
-            clearTile(16, sprite.y);
-            addSprite(16, sprite.y, "c");
-
-          }
-        });
+      checkColours()
+      
+      if (level == 2) {
+        if (counter > -8) {
+          counter -= 1
+          console.log("counter: " + counter)
+                      
+          getAll(black).forEach(sprite => {
+            addSprite(sprite.x, sprite.y, "b");
+            clearTile(sprite.x + 1, sprite.y);
+            sprite.x += 1;     
+            
+            if (sprite.x === 16) {
+              clearTile(0, sprite.y);
+              addSprite(0, sprite.y, "z");
+            
+            }
+            
+            if (sprite.x === 1) {
+              clearTile(0, sprite.y);
+              addSprite(0, sprite.y, "b");
+              clearTile(16, sprite.y);
+              addSprite(16, sprite.y, "c");
+  
+            }
+          });
+        }
       }
     });
   }
         }
       });
      })
-  }, 2100));
+}, 2100));
