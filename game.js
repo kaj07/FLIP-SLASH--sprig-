@@ -5,6 +5,61 @@
 @addedOn: 2024-00-00
 */
 
+// Variables and Constants
+
+let level = 0
+const levels = [
+  map`
+...........
+...........
+...........
+...........
+...........
+...........
+...........
+...........`,
+  map `
+ccccccccbbbbbbbb
+c..............b
+c..............b
+c..............b
+c..............b
+c..............b
+c..a........a..b
+c.a.a......a.a.b
+c..a........a..b
+c..............b
+c..............b
+c..............b
+ccccccccbbbbbbbb`,
+  map `
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc`,
+  map `
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+bbbbbbbbxcccccccc
+xxxxxxxxxcccccccc
+ccccccccccccccccc
+ccccccccccccccccc
+ccccccccccccccccc
+ccccccccccccccccc
+ccccccccccccccccc
+ccccccccccccccccc`
+]
+
 const black = "x"
 const border = "z"
 const darkGrey = "G"
@@ -13,6 +68,18 @@ const white = "w"
 const button = "a"
 const blue = "b"
 const red = "c"
+
+let inputUsed = false;
+let inputUsed2 = false;
+let counter = 0;
+
+let numberOfBlue = getAll(blue).length;
+let numberOfRed  = getAll(red).length;
+
+let hozLinX = 8;
+let hozLinY = 5;
+
+// Legend
 
 setLegend(
   [ black, bitmap `
@@ -153,65 +220,7 @@ LLLLLLLLLLLLLLLL`],
 3333333333333333`]
 )
 
-let level = 0
-const levels = [
-  map`
-...........
-...........
-...........
-...........
-...........
-...........
-...........
-...........`,
-  map `
-ccccccccbbbbbbbb
-c..............b
-c..............b
-c..............b
-c..............b
-c..............b
-c..a........a..b
-c.a.a......a.a.b
-c..a........a..b
-c..............b
-c..............b
-c..............b
-ccccccccbbbbbbbb`,
-  map `
-bbbbbbbbxcccccccc
-bbbbbbbbxcccccccc
-bbbbbbbbxcccccccc
-bbbbbbbbxcccccccc
-bbbbbbbbxcccccccc
-bbbbbbbbxcccccccc
-bbbbbbbbxcccccccc
-bbbbbbbbxcccccccc
-bbbbbbbbxcccccccc
-bbbbbbbbxcccccccc
-bbbbbbbbxcccccccc
-bbbbbbbbxcccccccc`,
-  map `
-bbbbbbbbxcccccccc
-bbbbbbbbxcccccccc
-bbbbbbbbxcccccccc
-bbbbbbbbxcccccccc
-bbbbbbbbxcccccccc
-xxxxxxxxxcccccccc
-ccccccccccccccccc
-ccccccccccccccccc
-ccccccccccccccccc
-ccccccccccccccccc
-ccccccccccccccccc
-ccccccccccccccccc`
-]
-
-setMap(levels[level])
-setBackground(black)
-
-let inputUsed = false;
-let inputUsed2 = false;
-let counter = 0;
+// Functions
 
 function checkColours() {
     numberOfBlue = getAll(blue).length;
@@ -223,6 +232,7 @@ function checkColours() {
       console.log("sfx for win")
       level += 1
       setMap(levels[level]);
+      counter = 0;
     }
   
     if (numberOfRed == 180) {
@@ -247,6 +257,11 @@ const changeBackground = (color, delay) => {
     }, delay);
   });
 }
+
+// Main Program
+
+setMap(levels[level])
+setBackground(black)
 
 addText("kaj07", { x: 8, y: 8, color: color`2`})
 
@@ -279,9 +294,6 @@ changeTextColor(color`1`, 1000)
         clearText();
         setMap(levels[level]);
         inputUsed2 = true;
-
-    let numberOfBlue = getAll(blue).length;
-    let numberOfRed  = getAll(red).length;
         
     onInput("a", () => {
       
@@ -297,13 +309,13 @@ changeTextColor(color`1`, 1000)
             clearTile(sprite.x - 1, sprite.y);
             sprite.x -= 1;
             
-            if (sprite.x === 0) {
+            if (sprite.x === 0) {                 // add border
               clearTile(16, sprite.y);
               addSprite(16, sprite.y, "z");
   
             }
             
-            if (sprite.x === 15) {
+            if (sprite.x === 15) {                // remove border
               clearTile(16, sprite.y);
               addSprite(16, sprite.y, "c");
               clearTile(0, sprite.y);
@@ -313,7 +325,23 @@ changeTextColor(color`1`, 1000)
           });
         }
       }
-    });
+
+    if (level == 3) {
+      if (counter < 8) {
+        counter += 1;
+        console.log("counter: " + counter);
+        
+          getAll(black).forEach(sprite => {
+            addSprite(sprite.x, sprite.y, "c");
+            clearTile(sprite.x - 1, sprite.y);
+            sprite.x -= 1;
+  
+          });
+      clearTile(hozLinX, hozLinY);
+      hozLinX -= 1
+      }
+    }
+  });
 
     onInput("d", () => {
       
@@ -329,13 +357,13 @@ changeTextColor(color`1`, 1000)
             clearTile(sprite.x + 1, sprite.y);
             sprite.x += 1;     
             
-            if (sprite.x === 16) {
+            if (sprite.x === 16) {                // add border
               clearTile(0, sprite.y);
               addSprite(0, sprite.y, "z");
             
             }
             
-            if (sprite.x === 1) {
+            if (sprite.x === 1) {                 // remove border
               clearTile(0, sprite.y);
               addSprite(0, sprite.y, "b");
               clearTile(16, sprite.y);
@@ -345,6 +373,20 @@ changeTextColor(color`1`, 1000)
           });
         }
       }
+    if (level == 3) {
+      if (counter > -8) {
+        counter -= 1;
+        console.log("counter: " + counter);
+        
+          getAll(black).forEach(sprite => {
+            addSprite(sprite.x, sprite.y, "b");
+            clearTile(sprite.x + 1, sprite.y);
+            sprite.x += 1;  
+          });
+      addSprite(hozLinX, hozLinY, "x");
+      hozLinX += 1
+      }
+    }
     });
   }
         }

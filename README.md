@@ -4,7 +4,7 @@
 
 A unique puzzle game based on flipping the colours of the screen.
 
-A link to the current code can be found here: [https://sprig.hackclub.com/share/vPyZJS4e3j40K7ncqFiP](https://sprig.hackclub.com/share/ybc7L7sE4Ez0iZvgcZpw)
+A link to the current game can be found here: https://sprig.hackclub.com/share/GwOaGcYzKeQPPyq7S2ux
 
 - Features a loading screen before the main menu
 - Will be comprised of several levels
