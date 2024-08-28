@@ -51,7 +51,7 @@ bbbbbbbbxcccccccc
 bbbbbbbbxcccccccc
 bbbbbbbbxcccccccc
 bbbbbbbbxcccccccc
-xxxxxxxxxcccccccc
+zzzzzzzzxcccccccc
 ccccccccccccccccc
 ccccccccccccccccc
 ccccccccccccccccc
@@ -71,6 +71,7 @@ const red = "c"
 
 let inputUsed = false;
 let inputUsed2 = false;
+let slashCheck = false;
 let counter = 0;
 
 let numberOfBlue = getAll(blue).length;
@@ -327,7 +328,7 @@ changeTextColor(color`1`, 1000)
       }
 
     if (level == 3) {
-      if (counter < 8) {
+      if (counter < 8 && !(slashCheck)) {
         counter += 1;
         console.log("counter: " + counter);
         
@@ -338,6 +339,7 @@ changeTextColor(color`1`, 1000)
   
           });
       clearTile(hozLinX, hozLinY);
+      addSprite(hozLinX, hozLinY, "c");
       hozLinX -= 1
       }
     }
@@ -374,7 +376,23 @@ changeTextColor(color`1`, 1000)
         }
       }
     if (level == 3) {
-      if (counter > -8) {
+      numberOfBlue = getAll(blue).length;
+      if (numberOfBlue == 96 || numberOfBlue == 88) {
+        console.log("sfx for slash")
+        slashCheck = true
+        
+        getAll(black).forEach(sprite => {
+          clearTile(sprite.x , sprite.y);
+          addSprite(sprite.x , sprite.y, "b");
+        });
+        
+        getAll(border).forEach(sprite => {
+          clearTile(sprite.x , sprite.y);
+          addSprite(sprite.x , sprite.y, "x");
+        });
+      }
+        
+      if (counter > -8 && !(slashCheck)) {
         counter -= 1;
         console.log("counter: " + counter);
         
@@ -383,7 +401,7 @@ changeTextColor(color`1`, 1000)
             clearTile(sprite.x + 1, sprite.y);
             sprite.x += 1;  
           });
-      addSprite(hozLinX, hozLinY, "x");
+      addSprite(hozLinX, hozLinY, "z");
       hozLinX += 1
       }
     }
