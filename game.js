@@ -57,7 +57,12 @@ ccccccccccccccccc
 ccccccccccccccccc
 ccccccccccccccccc
 ccccccccccccccccc
-ccccccccccccccccc`
+ccccccccccccccccc`,
+  map `
+bcbc
+cbcb
+bcbc
+cbcb` 
 ]
 
 const black = "x"
@@ -79,6 +84,13 @@ let numberOfRed  = getAll(red).length;
 
 let hozLinX = 8;
 let hozLinY = 5;
+
+// Music and SFX
+
+const opWin = tune `
+150: C4/150,
+150: C4/150,
+4500`
 
 // Legend
 
@@ -229,14 +241,14 @@ function checkColours() {
     console.log("blues: " + numberOfBlue)
     console.log("reds: " + numberOfRed)   
 
-    if (numberOfBlue == 180) {
+    if (numberOfBlue == 180 || numberOfBlue == 187) {
       console.log("sfx for win")
       level += 1
       setMap(levels[level]);
       counter = 0;
     }
   
-    if (numberOfRed == 180) {
+    if (numberOfRed == 180 || numberOfRed == 187) {
       console.log("sfx for opWin")
     }
 }
@@ -310,13 +322,13 @@ changeTextColor(color`1`, 1000)
             clearTile(sprite.x - 1, sprite.y);
             sprite.x -= 1;
             
-            if (sprite.x === 0) {                 // add border
+            if (sprite.x === 0) {                 // add border a
               clearTile(16, sprite.y);
               addSprite(16, sprite.y, "z");
   
             }
             
-            if (sprite.x === 15) {                // remove border
+            if (sprite.x === 15) {               // remove border d  
               clearTile(16, sprite.y);
               addSprite(16, sprite.y, "c");
               clearTile(0, sprite.y);
@@ -336,6 +348,16 @@ changeTextColor(color`1`, 1000)
             addSprite(sprite.x, sprite.y, "c");
             clearTile(sprite.x - 1, sprite.y);
             sprite.x -= 1;
+
+            if (sprite.x === 0) {                 // add border
+              clearTile(16, sprite.y);
+              addSprite(16, sprite.y, "z");
+              clearTile(16, sprite.y + 6);
+              addSprite(16, sprite.y + 6, "z");
+              clearTile(0, sprite.y + 6);
+              addSprite(0, sprite.y + 6, "z");
+  
+            }
   
           });
       clearTile(hozLinX, hozLinY);
@@ -359,13 +381,13 @@ changeTextColor(color`1`, 1000)
             clearTile(sprite.x + 1, sprite.y);
             sprite.x += 1;     
             
-            if (sprite.x === 16) {                // add border
+            if (sprite.x === 16) {                // add border d
               clearTile(0, sprite.y);
               addSprite(0, sprite.y, "z");
             
             }
             
-            if (sprite.x === 1) {                 // remove border
+            if (sprite.x === 1) {                 // remove border a
               clearTile(0, sprite.y);
               addSprite(0, sprite.y, "b");
               clearTile(16, sprite.y);
@@ -380,10 +402,21 @@ changeTextColor(color`1`, 1000)
       if (numberOfBlue == 96 || numberOfBlue == 88) {
         console.log("sfx for slash")
         slashCheck = true
+        counter = 0
         
         getAll(black).forEach(sprite => {
-          clearTile(sprite.x , sprite.y);
-          addSprite(sprite.x , sprite.y, "b");
+          if (sprite.y != 5) {
+            clearTile(sprite.x , sprite.y);
+            addSprite(sprite.x , sprite.y, "b");
+          }
+          
+          if (sprite.x === 1) {                 // remove border a
+            getAll(border).forEach(sprite => {
+              clearTile(sprite.x, sprite.y);
+              addSprite(0, sprite.y, "b");
+              addSprite(16, sprite.y, "c");
+            })
+          }
         });
         
         getAll(border).forEach(sprite => {
@@ -406,6 +439,39 @@ changeTextColor(color`1`, 1000)
       }
     }
     });
+
+    onInput("w", () => {
+
+      checkColours()
+      
+      if (level == 3 && slashCheck == true && counter <5) {
+        counter += 1;
+        console.log("counter: " + counter);
+        
+        getAll(black).forEach(sprite => {
+          addSprite(sprite.x, sprite.y, "c");
+          clearTile(sprite.x, sprite.y -1);
+          sprite.y -= 1;
+        });
+      }
+    });
+
+    onInput("s", () => {
+
+      checkColours()
+      
+      if (level == 3 && slashCheck == true && counter > -6) {
+        counter -= 1;
+        console.log("counter: " + counter);
+        
+        getAll(black).forEach(sprite => {
+          addSprite(sprite.x, sprite.y, "b");
+          clearTile(sprite.x, sprite.y +1);
+          sprite.y += 1;
+        });
+      }
+    });
+        
   }
         }
       });
