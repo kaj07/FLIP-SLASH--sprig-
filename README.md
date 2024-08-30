@@ -4,7 +4,7 @@
 
 A unique puzzle game based on flipping the colours of the screen and "slashing" your lines away.
 
-A link to the current game can be found here: https://sprig.hackclub.com/share/fM6tDuW0FKOeYeUM3vO7
+A link to the current game can be found here: [https://sprig.hackclub.com/share/fM6tDuW0FKOeYeUM3vO7](https://sprig.hackclub.com/share/bWLBNTa0jhe1a1fU3AAZ)
 
 - Features a loading screen before the main menu
 - Will be comprised of several levels
