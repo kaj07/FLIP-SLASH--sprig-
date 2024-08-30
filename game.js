@@ -82,7 +82,7 @@ let counter = 0;
 let numberOfBlue = getAll(blue).length;
 let numberOfRed  = getAll(red).length;
 
-let hozLinX = 8;
+let hozLinX = 8;     // The x and y for the horizontal line in level 2
 let hozLinY = 5;
 
 // Music and SFX
@@ -90,7 +90,7 @@ let hozLinY = 5;
 const opWin = tune `
 150: C4/150,
 150: C4/150,
-4500`
+4500`           // sfx for full screen red
 
 // Legend
 
@@ -251,8 +251,16 @@ function checkColours() {
     if (numberOfRed == 180 || numberOfRed == 187) {
       console.log("sfx for opWin")
     }
-}
-  
+}    // does stuff based on amount of red or blue
+
+function moveLineRight() {
+  getAll(black).forEach(sprite => {
+            addSprite(sprite.x, sprite.y, "b");
+            clearTile(sprite.x + 1, sprite.y);
+            sprite.x += 1;
+  });
+} // will add into code soon
+
 const changeTextColor = (color, delay) => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -260,7 +268,7 @@ const changeTextColor = (color, delay) => {
       resolve();
     }, delay);
   });
-}
+} // as described for intro
 
 const changeBackground = (color, delay) => {
   return new Promise((resolve) => {
@@ -269,7 +277,8 @@ const changeBackground = (color, delay) => {
       resolve();
     }, delay);
   });
-}
+} // as described for intro
+
 
 // Main Program
 
@@ -312,7 +321,7 @@ changeTextColor(color`1`, 1000)
       
       checkColours()
 
-      if (level == 2) {      
+      if (level == 2) {                           // controls for level 1
         if (counter < 8) {
           counter += 1
           console.log("counter: " + counter)
@@ -322,14 +331,14 @@ changeTextColor(color`1`, 1000)
             clearTile(sprite.x - 1, sprite.y);
             sprite.x -= 1;
             
-            if (sprite.x === 0) {                 // add border a
+            if (sprite.x === 0) {                 // add border when screen red
               clearTile(16, sprite.y);
               addSprite(16, sprite.y, "z");
   
             }
             
-            if (sprite.x === 15) {               // remove border d  
-              clearTile(16, sprite.y);
+            if (sprite.x === 15) {               // remove border when screen was blue
+              clearTile(16, sprite.y);           // however the border isn't ever seen
               addSprite(16, sprite.y, "c");
               clearTile(0, sprite.y);
               addSprite(0, sprite.y, "b");
@@ -339,8 +348,8 @@ changeTextColor(color`1`, 1000)
         }
       }
 
-    if (level == 3) {
-      if (counter < 8 && !(slashCheck)) {
+    if (level == 3) {                             // controls for level 2
+      if (counter < 8 && !(slashCheck)) {         
         counter += 1;
         console.log("counter: " + counter);
         
@@ -349,7 +358,7 @@ changeTextColor(color`1`, 1000)
             clearTile(sprite.x - 1, sprite.y);
             sprite.x -= 1;
 
-            if (sprite.x === 0) {                 // add border
+/*            if (sprite.x === 0) {                 // add border
               clearTile(16, sprite.y);
               addSprite(16, sprite.y, "z");
               clearTile(16, sprite.y + 6);
@@ -357,8 +366,8 @@ changeTextColor(color`1`, 1000)
               clearTile(0, sprite.y + 6);
               addSprite(0, sprite.y + 6, "z");
   
-            }
-  
+              }
+*/
           });
       clearTile(hozLinX, hozLinY);
       addSprite(hozLinX, hozLinY, "c");
@@ -371,7 +380,7 @@ changeTextColor(color`1`, 1000)
       
       checkColours()
       
-      if (level == 2) {
+      if (level == 2) {                          // controls for level 1
         if (counter > -8) {
           counter -= 1
           console.log("counter: " + counter)
@@ -381,13 +390,13 @@ changeTextColor(color`1`, 1000)
             clearTile(sprite.x + 1, sprite.y);
             sprite.x += 1;     
             
-            if (sprite.x === 16) {                // add border d
-              clearTile(0, sprite.y);
+            if (sprite.x === 16) {                // add border when screen blue
+              clearTile(0, sprite.y);             // not used as level increments
               addSprite(0, sprite.y, "z");
             
             }
             
-            if (sprite.x === 1) {                 // remove border a
+            if (sprite.x === 1) {                 // remove border when screen was red
               clearTile(0, sprite.y);
               addSprite(0, sprite.y, "b");
               clearTile(16, sprite.y);
@@ -397,29 +406,22 @@ changeTextColor(color`1`, 1000)
           });
         }
       }
-    if (level == 3) {
+    if (level == 3) {                           // controls for level 2
+
       numberOfBlue = getAll(blue).length;
-      if (numberOfBlue == 96 || numberOfBlue == 88) {
+      if (numberOfBlue == 96 || numberOfBlue == 88) {  // switches controls when half screen blue
         console.log("sfx for slash")
         slashCheck = true
         counter = 0
         
-        getAll(black).forEach(sprite => {
+        getAll(black).forEach(sprite => {          // slashes old line
           if (sprite.y != 5) {
             clearTile(sprite.x , sprite.y);
             addSprite(sprite.x , sprite.y, "b");
           }
-          
-          if (sprite.x === 1) {                 // remove border a
-            getAll(border).forEach(sprite => {
-              clearTile(sprite.x, sprite.y);
-              addSprite(0, sprite.y, "b");
-              addSprite(16, sprite.y, "c");
-            })
-          }
         });
         
-        getAll(border).forEach(sprite => {
+        getAll(border).forEach(sprite => {       // converts hoz line to make it moveable
           clearTile(sprite.x , sprite.y);
           addSprite(sprite.x , sprite.y, "x");
         });
@@ -444,7 +446,7 @@ changeTextColor(color`1`, 1000)
 
       checkColours()
       
-      if (level == 3 && slashCheck == true && counter <5) {
+      if (level == 3 && slashCheck == true && counter <5) { // controls only work at level 2
         counter += 1;
         console.log("counter: " + counter);
         
@@ -460,7 +462,7 @@ changeTextColor(color`1`, 1000)
 
       checkColours()
       
-      if (level == 3 && slashCheck == true && counter > -6) {
+      if (level == 3 && slashCheck == true && counter > -6) { // controls only work at level 2
         counter -= 1;
         console.log("counter: " + counter);
         
